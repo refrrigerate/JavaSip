@@ -169,44 +169,37 @@ if (history.scrollRestoration) {
 
 /* Product div */ {
 
-// 1. A helper function to reset all modals
 function closeAllModals() {
     document.querySelectorAll('.productmodal').forEach(modal => {
         modal.classList.remove('show');
     });
     document.querySelectorAll('.productdiv').forEach(div => {
-        div.style.zIndex = "1"; // Reset z-index so it doesn't overlap header
+        div.style.zIndex = "1";
     });
 }
 
-// 2. Handle clicking on the Product Cards
 document.querySelectorAll('.productdiv').forEach(div => {
     const modal = div.querySelector('.productmodal');
 
     div.addEventListener('click', (e) => {
         const isOpen = modal.classList.contains('show');
         
-        // Close everything else first
         closeAllModals();
 
-        // If the one we clicked wasn't already open, open it
         if (!isOpen) {
             modal.classList.add('show');
-            // Set z-index high enough to be seen, but lower than header (1000)
             div.style.zIndex = "900"; 
         }
     });
 
-    // FIX: This prevents the modal from closing when you click INSIDE it
     modal.addEventListener('click', (e) => {
         e.stopPropagation();
     });
 });
 
-// 3. Handle clicking on the Sidebar Menu Buttons
 document.querySelectorAll('.productbtn').forEach(btn => {
     btn.addEventListener('click', () => {
-        // This converts "hotcoffeebtn" to "hotcoffee" to find the right div
+
         const baseId = btn.id.replace('btn', '');
         const targetDiv = document.getElementById(baseId + 'div');
         const targetModal = document.getElementById(baseId + 'modal');
@@ -224,7 +217,6 @@ document.querySelectorAll('.productbtn').forEach(btn => {
     });
 });
 
-// 4. Global click: Close modals if user clicks the empty background
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.productdiv') && !e.target.closest('.productbtn')) {
         closeAllModals();
@@ -249,65 +241,31 @@ document.addEventListener('click', (e) => {
     });
 }
 
-/* Menu nav */ {
-    let meb = document.getElementById("meb");
-    let me = document.getElementById("menudiv");
-
-    let feb = document.getElementById("feb");
-    let fe = document.getElementById("featdiv");
-    
-    let prb = document.getElementById("prb");
-    let pr = document.getElementById("prevdiv");
-    
-    let sab = document.getElementById("sab");
-    let sa = document.getElementById("savdiv");
+/* Menu nav (DOM + Arrays + Functions)*/ {
 
     meb.classList.add("active");
+    menudiv.classList.add("show");
 
-    meb.onclick = function() {
-        me.classList.remove("hide");
-        fe.classList.remove("show");
-        pr.classList.remove("show");
-        sa.classList.remove("show");
+    const tabs = [
+        { btn: "meb", content: "menudiv" },
+        { btn: "feb", content: "featdiv" },
+        { btn: "prb", content: "prevdiv" },
+        { btn: "sab", content: "savdiv" }
+    ];
 
-        meb.classList.add("active");
-        feb.classList.remove("active");
-        prb.classList.remove("active");
-        sab.classList.remove("active");
+    function switchTab(activeIndex) {
+        tabs.forEach((tab, i) => {
+        document.getElementById(tab.content).classList.remove("show");
+        document.getElementById(tab.btn).classList.remove("active");
+    });
+
+    document.getElementById(tabs[activeIndex].content).classList.add("show");
+    document.getElementById(tabs[activeIndex].btn).classList.add("active");
     }
-    feb.onclick = function() {
-        me.classList.add("hide");
-        fe.classList.add("show");
-        pr.classList.remove("show");
-        sa.classList.remove("show");
 
-        meb.classList.remove("active");
-        feb.classList.add("active");
-        prb.classList.remove("active");
-        sab.classList.remove("active");
-    }
-    prb.onclick = function() {
-        me.classList.add("hide");
-        fe.classList.remove("show");
-        pr.classList.add("show");
-        sa.classList.remove("show");
-
-        meb.classList.remove("active");
-        feb.classList.remove("active");
-        prb.classList.add("active");
-        sab.classList.remove("active");
-    }
-    sab.onclick = function() {
-        me.classList.add("hide");
-        fe.classList.remove("show");
-        pr.classList.remove("show");
-        sa.classList.add("show");
-
-        meb.classList.remove("active");
-        feb.classList.remove("active");
-        prb.classList.remove("active");
-        sab.classList.add("active");
-    }
+    tabs.forEach((tab, i) => {
+      document.getElementById(tab.btn).onclick = () => switchTab(i);
+    });
 }
 
 /* Cart */ {
@@ -339,4 +297,11 @@ document.addEventListener('click', (e) => {
     cc.onclick = function() {
         c.classList.remove("show");
     }
+}
+
+/* */{
+
+    let pd = document.getElementsByClassName("productdiv");
+
+
 }
